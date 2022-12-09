@@ -1,0 +1,59 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/pagrindinis', function () {
+    return view('pagrindinis');
+});
+
+Route::get('/add', function () {
+    return view('add');
+});
+
+Route::get('/ekstremalus', function () {
+    return view('ekstremalus');
+});
+
+Route::get('/laisvalaikis', function () {
+    return view('laisvalaikis');
+});
+
+Route::get('/sportas', function () {
+    return view('sportas');
+});
+
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
+
+
+Route::get('/', [Products::class, 'index'])->middleware('auth');
+
+Route::prefix('products')->group(function(){
+
+    Route::get('/{id}', [Products::class, 'find'])->middleware('auth');
+    Route::get('/{add}', [Products::class, 'add'])->middleware('auth');
+    Route::get('/{modify}', [Products::class, 'modify'])->middleware('auth');
+
+    Route::post('/create', [Products::class, 'create']);
+    Route::post('/update', [Products::class, 'update']);
+    Route::post('/delete/{id}', [Products::class, 'delete']);
+});
